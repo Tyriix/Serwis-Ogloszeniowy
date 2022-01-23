@@ -1,0 +1,13 @@
+﻿body {
+    margin: 20px;
+}
+
+form {
+    width: 300px;
+}
+.pb-3 {
+    width: 600px;
+}
+.login-form {
+    width: 600px !important;
+}

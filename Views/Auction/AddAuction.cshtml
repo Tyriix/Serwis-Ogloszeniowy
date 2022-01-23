@@ -1,0 +1,70 @@
+﻿@model SerwisOgloszeniowy.Models.AuctionModels.Auction
+@{
+    ViewData["Title"] = "Dodaj Ogłoszenie";
+}
+<link href="css/Register.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+    <div class="card bg-light">
+        <article class="card-body">
+            <h3 class="card-title mt-3 text-center">Dodaj ogłoszenie</h3>
+            <form>
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fas fa-quote-right" style="width:2em"></i> </span>
+                    </div>
+                    <input asp-for="Title" class="form-control" placeholder="Tytuł" type="text">
+                </div>
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-envelope" style="width:2em"></i> </span>
+                    </div>
+                    <select asp-for="Category" id="kategoria" class="form-control">
+                        <option value="Moda">Moda</option>
+                        <option value="Elektronika">Elektronika</option>
+                        <option value="Motoryzacja">Motoryzacja</option>
+                        <option value="Dom i ogród">Dom i ogród</option>
+                        <option value="Sport i hobby">Sport i hobby</option>
+                    </select>
+                </div>
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fas fa-dollar-sign" style="width:2em"></i> </span>
+                    </div>
+                    <input asp-for="Price" class="form-control" placeholder="Cena" type="text">
+                </div>
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fas fa-images" style="width:2em"></i> </span>
+                    </div>
+                    <input asp-for="Image" type="file" class="form-control" style="padding:0.2rem 0.75rem" id="dodajZdjecie" multiple />
+                </div>
+                <div class="form-group">
+                    <label for="opis">Opis*</label>
+                    <textarea asp-for="Description" class="form-control" placeholder="Opisz szczegółowo sprzedawany przez ciebie przedmiot" type="textarea" id="opis" rows="7"></textarea>
+                </div>
+                <h4 class="card-title mt-3 text-center">Dane kontaktowe</h4>
+                <div class="form-group input-group">
+
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fas fa-map-marker-alt" style="width:2em"></i> </span>
+                    </div>
+                    <input asp-for="City" class="form-control" placeholder="Miasto" type="text">
+                </div>
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fas fa-envelope" style="width:2em"></i> </span>
+                    </div>
+                    <input asp-for="Email" class="form-control" placeholder="Adres e-mail" type="text">
+                </div>
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fas fa-mobile-alt" style="width:2em"></i> </span>
+                    </div>
+                    <input asp-for="PhoneNumber" class="form-control" placeholder="Numer telefonu" type="text">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block"> Dodaj ogłoszenie </button>
+                </div>
+            </form>
+        </article>
+    </div>
