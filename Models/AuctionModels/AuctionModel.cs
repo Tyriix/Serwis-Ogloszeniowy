@@ -1,13 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
+using SerwisOgloszeniowy.Models.AccountManagerModels;
 
 namespace SerwisOgloszeniowy.Models.AuctionModels
 {
-    public class Auction
+    public class AuctionModel
     {
         [HiddenInput]
         public int Id { get; set; }
+        [Required]
+        [HiddenInput]
+        public ApplicationUser user { get; set; }
         [Required(ErrorMessage = "Musisz podać tytuł.")]
         public string Title { get; set; }
         [Required(ErrorMessage = "Prosze podać kategorię.")]

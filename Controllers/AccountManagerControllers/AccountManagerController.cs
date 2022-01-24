@@ -27,6 +27,7 @@ namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
                 var user = new ApplicationUser
                 {
                     UserName = registerModel.Username,
+                    Email = registerModel.Email,
                     Firstname = registerModel.Firstname,
                     City = registerModel.City,
                     PhoneNo = registerModel.PhoneNo
@@ -49,29 +50,36 @@ namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
             return View(registerModel);
         }
         [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginModel loginModel)
+        public async Task<IActionResult> Login(LoginModel user, string returnUrl)
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = await _userManager.FindByNameAsync(loginModel.Username);
-                if (user != null)
+                var result = await _signInManager.PasswordSignInAsync(user.Username, user.Password, user.RememberMe, false);
+                if (result.Succeeded)
                 {
-                    await _signInManager.SignOutAsync(); if ((await _signInManager.PasswordSignInAsync(user, loginModel.Password, false, false)).Succeeded)
+                    if (!string.IsNullOrEmpty(returnUrl))
                     {
-                        return RedirectToAction("Index", "Home");
+                        return Redirect(returnUrl);
                     }
+                    return RedirectToAction("Index", "Home");
                 }
+                ModelState.AddModelError(string.Empty, "Zła nazwa użytkownika lub hasło.");
             }
-            ModelState.AddModelError("", "Nieprawidłowa nazwa użytkownika lub hasło");
-            return View(loginModel);
+            return View(user);
         }
 
-        public async Task<RedirectResult> Logout()
+        public async Task<RedirectResult> Logout(string returnUrl = "/")
         {
             await _signInManager.SignOutAsync();
-            return Redirect("Login");
+            return Redirect(returnUrl);
         }
         public IActionResult Index()
         {
@@ -83,14 +91,31 @@ namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
         {
             return View();
         }
-        [AllowAnonymous]
+
+        //[HttpPost]
+        //public async Task<IActionResult> Profile(ApplicationUser userDetails)
+        //{
+        //    IdentityResult x = await _userManager.UpdateAsync(userDetails);
+        //    if (x.Succeeded)
+        //    {
+        //        return RedirectToAction("Index", "Home");
+        //    }
+        //    return View(userDetails);
+        //}
+        [Authorize]
         [HttpGet]
-        public IActionResult Login(string returnUrl)
+        public IActionResult Profile()
         {
-            return View(new LoginModel
+            var userid = _userManager.GetUserId(HttpContext.User);
+            if (userid == null)
             {
-                ReturnUrl = returnUrl
-            });
+                return RedirectToAction("Login", "AccountManager");
+            }
+            else
+            {
+                ApplicationUser user = _userManager.FindByIdAsync(userid).Result;
+                return View(user);
+            }
         }
     }
 }

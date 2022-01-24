@@ -9,41 +9,51 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Serwis Ogloszeniowy</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Strona główna</a>
-                        </li>
-                       <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="AccountManager" asp-action="Login">Zaloguj się</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="AccountManager" asp-action="Register">Zarejestruj się</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Auction" asp-action="AddAuction">Dodaj ogłoszenie</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ApplicationUser" asp-action="Profile">Mój profil</a>
-                        </li>
-                    </ul>
+        <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" style="color:white;">Serwis Ogłoszeniowy</a>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a asp-controller="Home" asp-action="Index" class="nav-item nav-link">Strona główna</a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-controller="Auction" asp-action="AddAuction" class="nav-item nav-link">Dodaj ogłoszenie</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+                        <ul class="navbar-nav ml-auto">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item">
+                                    <a asp-controller="AccountManager" asp-action="Logout" class="nav-item nav-link">Wyloguj się</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="AccountManager" asp-action="Profile" class="nav-item nav-link">Mój profil</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a asp-controller="AccountManager" asp-action="Login" class="nav-item nav-link">Zaloguj się</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="AccountManager" asp-action="Register" class="nav-item nav-link">Zarejestruj się</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container" style="padding-top:20px;">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2022 - SerwisOgloszeniowy - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

@@ -8,53 +8,53 @@
     <article class="card-body mx-auto" style="max-width: 400px;">
         <h4 class="card-title mt-3 text-center">Zarejestruj się</h4>
         <form method="post" asp-action="Register">
-            <div asp-validation-summary="All"></div>
+            <div asp-validation-summary="All" style="color:#cc0000;"></div>
             <div class="form-group input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text"> <i class="fas fa-user"></i> </span>
                 </div>
                 <input asp-for="Username" type="text" class="form-control" placeholder="Nazwa użytkownika">
-                <span asp-validation-for="Username" class="text-danger"></span>
             </div>
             <div class="form-group input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                 </div>
                 <input asp-for="Password" type="password" class="form-control" placeholder="Hasło">
-                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                 </div>
                 <input asp-for="RepeatPassword" type="password" class="form-control" placeholder="Powtórz Hasło">
-                <span asp-validation-for="RepeatPassword" class="text-danger"></span>
             </div>
             <div class="form-group input-group">
                 <div class="input-group-prepend">
-                    <span class="input-group-text"> <i class="fas fa-user"></i> </span>
+                    <span class="input-group-text"> <i class="fas fa-envelope"></i> </span>
                 </div>
-                <input asp-for="Firstname" type="text" class="form-control" placeholder="Miasto">
-                <span asp-validation-for="Firstname" class="text-danger"></span>
+                <input asp-for="Email" type="email" class="form-control" placeholder="Email">
             </div>
             <div class="form-group input-group">
                 <div class="input-group-prepend">
-                    <span class="input-group-text"> <i class="fas fa-user"></i> </span>
+                    <span class="input-group-text"> <i class="fas fa-id-card"></i> </span>
                 </div>
-                <input asp-for="City" type="text" class="form-control" placeholder="Nazwa użytkownika">
-                <span asp-validation-for="City" class="text-danger"></span>
+                <input asp-for="Firstname" type="text" class="form-control" placeholder="Imię">
             </div>
             <div class="form-group input-group">
                 <div class="input-group-prepend">
-                    <span class="input-group-text"> <i class="fas fa-user"></i> </span>
+                    <span class="input-group-text" style="width:42px;"> <i class="fas fa-map-marker-alt" style="width:16px;"></i> </span>
                 </div>
-                <input asp-for="PhoneNo" type="text" class="form-control" placeholder="Nazwa użytkownika">
-                <span asp-validation-for="PhoneNo" class="text-danger"></span>
+                <input asp-for="City" type="text" class="form-control" placeholder="Miasto">
+            </div>
+            <div class="form-group input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" style="width:42px;"> <i class="fas fa-mobile-alt" style="width:16px;"></i> </span>
+                </div>
+                <input asp-for="PhoneNo" type="text" class="form-control" placeholder="Numer telefonu">
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary btn-block"> Utwórz konto  </button>
             </div>
-            <p class="text-center">Masz już konto? <a asp-controller="Home" asp-action="Login">Zaloguj się</a> </p>
+            <p class="text-center">Masz już konto? <a asp-controller="AccountManager" asp-action="Login">Zaloguj się</a> </p>
         </form>
     </article>
 </div>

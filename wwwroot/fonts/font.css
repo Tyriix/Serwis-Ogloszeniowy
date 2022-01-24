@@ -1,0 +1,7 @@
+﻿@font-face{
+    font-family: 'Proxima';
+    src: local('Proxima'), url('./Proxima.otf') format('truetype');
+}
+.hFont{
+    font-family:'Proxima' !important;
+}

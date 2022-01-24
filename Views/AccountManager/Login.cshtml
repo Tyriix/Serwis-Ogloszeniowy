@@ -1,6 +1,9 @@
-﻿@model SerwisOgloszeniowy.Models.AccountManagerModels.LoginModel
+﻿@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Http;
+@model SerwisOgloszeniowy.Models.AccountManagerModels.LoginModel
 @{
     ViewData["Title"] = "Login";
+    var returnUrl = Context.Request.Query["returnUrl"];
 }
 <head>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
@@ -9,7 +12,8 @@
 <div class="card bg-light">
     <article class="card-body mx-auto" style="min-width: 400px;">
         <h4 class="card-title mt-3 text-center">Zaloguj się</h4>
-        <form method="post" asp-action="Index">
+        <div asp-validation-summary="All" style="color:#cc0000;"></div>
+        <form method="post">
             <div class="form-group input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text"> <i class="fas fa-user"></i> </span>
@@ -26,9 +30,9 @@
                 <button type="submit" class="btn btn-primary btn-block"> Zaloguj </button>
             </div>
             <div class="form-group input-group" style="align-items:center; justify-content:center;">
-                <input asp-for="RememberMe" type="checkbox" checked="checked" name="zapamietaj"> <span style="padding-left:0.5em">Zapamiętaj mnie</span>
+                <input asp-for="RememberMe" type="checkbox" checked="checked"> <span style="padding-left:0.5em">Zapamiętaj mnie</span>
             </div>
-            <p class="text-center">Nie masz konta? <a asp-controller="Home" asp-action="Register">Zarejestruj się</a> </p>
+            <p class="text-center">Nie masz konta? <a asp-controller="AccountManager" asp-action="Register">Zarejestruj się</a> </p>
         </form>
     </article>
 </div>

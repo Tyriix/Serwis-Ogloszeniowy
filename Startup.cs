@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,8 +36,20 @@ namespace SerwisOgloszeniowy
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
             services.AddMemoryCache();
             services.AddSession();
-            services.AddMvc();
-            services.ConfigureApplicationCookie(options => options.LoginPath = "/Account/Login");
+            services.AddMvcCore().AddAuthorization();
+            services.AddControllers();
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.LoginPath = "/AccountManager/Login";
+                options.SlidingExpiration = true;
+            });
+
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new AuthorizeFilter());
+            });
 
         }
 
@@ -57,7 +71,6 @@ namespace SerwisOgloszeniowy
             app.UseRouting();
             app.UseSession();
             app.UseAuthentication();
-            app.UseMiddleware<AuthenticationMiddleware>();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

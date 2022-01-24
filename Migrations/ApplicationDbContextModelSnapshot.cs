@@ -264,7 +264,13 @@ namespace SerwisOgloszeniowy.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("userId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("userId");
 
                     b.ToTable("Auctions");
                 });
@@ -318,6 +324,22 @@ namespace SerwisOgloszeniowy.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SerwisOgloszeniowy.Models.AuctionModels.Auction", b =>
+                {
+                    b.HasOne("SerwisOgloszeniowy.Models.AccountManagerModels.ApplicationUser", "user")
+                        .WithMany("Auctions")
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("user");
+                });
+
+            modelBuilder.Entity("SerwisOgloszeniowy.Models.AccountManagerModels.ApplicationUser", b =>
+                {
+                    b.Navigation("Auctions");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,4 @@
-﻿@model SerwisOgloszeniowy.Models.AuctionModels.Auction
+﻿@model SerwisOgloszeniowy.Models.AuctionModels.AuctionModel
 @{
     ViewData["Title"] = "Dodaj Ogłoszenie";
 }
@@ -7,7 +7,7 @@
     <div class="card bg-light">
         <article class="card-body">
             <h3 class="card-title mt-3 text-center">Dodaj ogłoszenie</h3>
-            <form>
+            <form method="post">
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-quote-right" style="width:2em"></i> </span>
@@ -54,7 +54,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-envelope" style="width:2em"></i> </span>
                     </div>
-                    <input asp-for="Email" class="form-control" placeholder="Adres e-mail" type="text">
+                    <input asp-for="Email" class="form-control" placeholder="" type="text">
                 </div>
                 <div class="form-group input-group">
                     <div class="input-group-prepend">

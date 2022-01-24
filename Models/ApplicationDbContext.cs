@@ -9,6 +9,6 @@ namespace SerwisOgloszeniowy.Models
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
         public DbSet<ApplicationUser> applicationUsers { get; set; }
-        public DbSet<Auction> Auctions { get; set; }
+        public DbSet<AuctionModel> Auctions { get; set; }
     }
 }

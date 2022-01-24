@@ -22,7 +22,7 @@ namespace SerwisOgloszeniowy.Controllers
         {
             _logger = logger;
         }
-
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
@@ -32,8 +32,6 @@ namespace SerwisOgloszeniowy.Controllers
         {
             return View();
         }
-
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
