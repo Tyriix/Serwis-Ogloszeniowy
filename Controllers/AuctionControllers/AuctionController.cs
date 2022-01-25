@@ -5,13 +5,12 @@ using SerwisOgloszeniowy.Models;
 using SerwisOgloszeniowy.Models.AccountManagerModels;
 using SerwisOgloszeniowy.Models.AuctionModels;
 using SerwisOgloszeniowy.Views.Auction;
-using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Linq;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace SerwisOgloszeniowy.Controllers.AuctionControllers
@@ -30,20 +29,28 @@ namespace SerwisOgloszeniowy.Controllers.AuctionControllers
             this.context = context;
             this.userManager = userManager;
         }
+        [AllowAnonymous]
         public IActionResult AuctionDetails(AuctionModel auction)
         {
+            ViewData["currentUserId"] = userManager.GetUserId(HttpContext.User);
             auction = repository.FindById(auction.Id);
             return View(auction);
         }
         [AllowAnonymous]
-        public IActionResult AuctionList()
+        public async Task<IActionResult> AuctionList(string searchTerm, int pageNumber=1)
         {
-            ViewBag.auctions = context.Auctions.ToList();
-            return View();
-            //return View(repository.FindAll());
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                return View(await PaginatedList<AuctionModel>.CreateAsync(context.Auctions, pageNumber, 5));
+            }
+            return View(await PaginatedList<AuctionModel>.CreateAsync(context.Auctions.Where(c => c.Title.Contains(searchTerm)), pageNumber, 5));
         }
         public IActionResult AddAuction()
         {
+            var user = userManager.GetUserAsync(User).Result;
+            ViewBag.City = user.City;
+            ViewBag.PhoneNumber = user.PhoneNo;
+            ViewBag.Email = user.Email;
             return View();
         }
         [HttpPost]
@@ -69,6 +76,11 @@ namespace SerwisOgloszeniowy.Controllers.AuctionControllers
                 return View("AddAuction");
             }
         }
-
+        [HttpPost]
+        public IActionResult Delete(AuctionModel item)
+        {
+            repository.Delete(item.Id);
+            return RedirectToAction("AuctionList", AuctionList(""));
+        }
     }
 }

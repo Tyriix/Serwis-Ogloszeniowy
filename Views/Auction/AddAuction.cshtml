@@ -1,6 +1,11 @@
-﻿@model SerwisOgloszeniowy.Models.AuctionModels.AuctionModel
+﻿@using Microsoft.AspNetCore.Identity
+@using SerwisOgloszeniowy.Models.AccountManagerModels
+@model SerwisOgloszeniowy.Models.AuctionModels.AuctionModel
 @{
     ViewData["Title"] = "Dodaj Ogłoszenie";
+    string currentCity = @ViewBag.City;
+    string currentEmail = @ViewBag.Email;
+    string currentPhoneNumber = @ViewBag.PhoneNumber;
 }
 <link href="css/Register.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
@@ -49,19 +54,19 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-map-marker-alt" style="width:2em"></i> </span>
                     </div>
-                    <input asp-for="City" class="form-control" placeholder="Miasto" type="text">
+                    <input asp-for="City" class="form-control" value="@currentCity" type="text">
                 </div>
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-envelope" style="width:2em"></i> </span>
                     </div>
-                    <input asp-for="Email" class="form-control" placeholder="" type="text">
+                    <input asp-for="Email" class="form-control" value="@currentEmail" type="text">
                 </div>
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-mobile-alt" style="width:2em"></i> </span>
                     </div>
-                    <input asp-for="PhoneNumber" class="form-control" placeholder="Numer telefonu" type="text">
+                    <input asp-for="PhoneNumber" class="form-control" value="@currentPhoneNumber" type="text">
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block"> Dodaj ogłoszenie </button>

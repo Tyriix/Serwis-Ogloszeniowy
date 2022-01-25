@@ -7,29 +7,31 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
 <h3>Edytuj dane</h3>
 <form method="post" asp-action="Profile">
-  <div class="form-row">
-    <div class="form-group col-md-6">
-      <label for="inputEmail4">Imię</label>
-      <input asp-for="Firstname" type="text" class="form-control" id="inputEmail4" placeholder="@Html.DisplayFor(model => model.Firstname)">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputEmail4">Imię</label>
+            <input asp-for="Firstname" type="text" class="form-control" id="inputEmail4" placeholder="@Html.DisplayFor(model => model.Firstname)">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputPassword4">Email</label>
+            <input asp-for="Email" type="text" class="form-control" id="inputPassword4" placeholder="@Html.DisplayFor(model => model.Email)">
+        </div>
     </div>
-    <div class="form-group col-md-6">
-      <label for="inputPassword4">Email</label>
-      <input asp-for="Email" type="text" class="form-control" id="inputPassword4" placeholder="@Html.DisplayFor(model => model.Email)">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputAddress">Miasto</label>
+            <input asp-for="City" type="text" class="form-control" id="inputAddress" placeholder="@Html.DisplayFor(model => model.City)">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputAddress2">Numer telefonu</label>
+            <input asp-for="PhoneNo" type="text" class="form-control" id="inputAddress2" placeholder="@Html.DisplayFor(model => model.PhoneNo)">
+        </div>
     </div>
-  </div>
-  <div class="form-row">
-  <div class="form-group col-md-6">
-    <label for="inputAddress">Miasto</label>
-    <input asp-for="City" type="text" class="form-control" id="inputAddress" placeholder="@Html.DisplayFor(model => model.City)">
-  </div>
-  <div class="form-group col-md-6">
-    <label for="inputAddress2">Numer telefonu</label>
-    <input asp-for="PhoneNo" type="text" class="form-control" id="inputAddress2" placeholder="@Html.DisplayFor(model => model.PhoneNo)">
-  </div>
-  </div>
-  <button type="submit" class="btn btn-success">Zapisz</button>
-  <button type="reset" class="btn btn-danger"><i class="fas fa-sync-alt"></i> Resetuj</button>
+    <button type="submit" class="btn btn-success">Zapisz</button>
+    <button type="reset" class="btn btn-danger"><i class="fas fa-sync-alt"></i> Resetuj</button>
 </form>
 @section Scripts{
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
 }

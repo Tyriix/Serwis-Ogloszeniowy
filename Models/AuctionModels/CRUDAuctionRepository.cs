@@ -1,14 +1,14 @@
-﻿using SerwisOgloszeniowy.Models;
-using SerwisOgloszeniowy.Models.AuctionModels;
+﻿using SerwisOgloszeniowy.Views.Auction;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
-namespace SerwisOgloszeniowy.Views.Auction
+namespace SerwisOgloszeniowy.Models.AuctionModels
 {
-    internal class EFAuctionRepository : ICRUDAuctionRepository
+    public class CRUDAuctionRepository : ICRUDAuctionRepository
     {
         private ApplicationDbContext _context;
-        public EFAuctionRepository(ApplicationDbContext context)
+        public CRUDAuctionRepository(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -17,15 +17,15 @@ namespace SerwisOgloszeniowy.Views.Auction
             return _context.Auctions.ToList();
         }
         public IQueryable<AuctionModel> Auctions => _context.Auctions;
-
         public AuctionModel FindById(int Id)
         {
             return _context.Auctions.Find(Id);
         }
-        public void Delete(int Id)
+        public AuctionModel Delete(int Id)
         {
             var auction = _context.Auctions.Remove(FindById(Id)).Entity;
             _context.SaveChanges();
+            return auction;
         }
         public AuctionModel Update(AuctionModel auction)
         {

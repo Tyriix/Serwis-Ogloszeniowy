@@ -1,7 +1,13 @@
-﻿@model SerwisOgloszeniowy.Models.AuctionModels.AuctionModel
+﻿@using SerwisOgloszeniowy.Models.AuctionModels
+@model PaginatedList<SerwisOgloszeniowy.Models.AuctionModels.AuctionModel>
+@*@model SerwisOgloszeniowy.Models.AuctionModels.AuctionModel*@
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+    @{
+    var prevDisabled = !Model.PreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.NextPage ? "disabled" : "";
+}
 @{
 }
 <link rel="stylesheet" href="css/AuctionList.css">
@@ -12,58 +18,75 @@
         </div>
     </div>
     <div class="row">
-            <div class="col-lg-8 mx-auto">
-                    <div class="row justify-content-center">
-                        <div class="col-12 col-md-10 col-lg-8">
-                            <form class="card card-sm" method="get" asp-controller="Auction" asp-action="Search" >
-                                <div class="card-body row no-gutters align-items-center">
-                                    <div class="col-auto">
-                                        <i class="fas fa-search h4 text-body"></i>
-                                    </div>
-                                    <!--end of col-->
-                                    <div class="col">
-                                        <input class="form-control form-control-lg form-control-borderless" name="SearchString" type="text">
-                                    </div>
-                                    <!--end of col-->
-                                    <div class="col-auto">
-                                        <button class="btn btn-lg btn-success" value="Search" type="submit">Search</button>
-                                    </div>
-                                    <!--end of col-->
-                                </div>
-                            </form>
+        <div class="col-lg-8 mx-auto">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-10 col-lg-8">
+                    <form class="card card-sm" method="get">
+                        <div class="card-body row no-gutters align-items-center">
+                            <div class="col-auto">
+                                <i class="fas fa-search h4 text-body"></i>
+                            </div>
+                            <!--end of col-->
+                            <div class="col">
+                                <input asp-for="SearchTerm" class="form-control form-control-lg form-control-borderless" name="SearchTerm" type="text">
+                            </div>
+                            <!--end of col-->
+                            <div class="col-auto">
+                                <button class="btn btn-lg btn-success" value="Search" type="submit">Search</button>
+                            </div>
+                            <!--end of col-->
                         </div>
-                        <!--end of col-->
-                    </div>
+                    </form>
+                </div>
+                <!--end of col-->
             </div>
+        </div>
     </div>
-    @foreach (var auction in ViewBag.Auctions)
+    @foreach (var auction in Model)
     {
 
+        <a asp-controller="Auction" asp-action="AuctionDetails" asp-route-id="@auction.Id" style="text-decoration:none; color:inherit;">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <!-- List group-->
+                <ul class="list-group shadow">
+                        <!-- list group item-->
+                    <li class="list-group-item">
+                            <!-- Custom content-->
+                        <div class="media align-items-lg-center flex-column flex-lg-row p-3">
+                                <div class="media-body order-2 order-lg-1">
+                                    <h5 class="mt-0 font-weight-bold mb-2">@auction.Title</h5>
+                                    <p class="font-italic text-muted mb-0 small">
+                                        @if (@auction.Description.Length < 100)
+                                        {
+                                            @auction.Description
+                                        }
+                                        else
+                                        {
+                                            @(auction.Description.Substring(0, 100) + " (...)")
+                                        }
+                                    </p>
+                                    <div class="d-flex align-items-center justify-content-between mt-1">
+                                        <h6 class="font-weight-bold my-2">@auction.Price zł</h6>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between mt-1">
+                                        <p class="font-italic text-muted mb-0 small">@auction.CreationTimestamp | @auction.City</p>
+                                    </div>
+                                </div><img src="data:image;base64,@Convert.ToBase64String(auction.Image)" width="200" height="200" class="ml-lg-5 order-1 order-lg-2">
+                            </div> <!-- End -->
+                    </li> <!-- End -->
+                </ul> <!-- End -->
+            </div>
 
-        <div class="row">
-            <div class="col-lg-8 mx-auto">
-                <!-- List group-->
-            <ul class="list-group shadow">
-                    <!-- list group item-->
-                <li class="list-group-item">
-                        <!-- Custom content-->
-                    <div class="media align-items-lg-center flex-column flex-lg-row p-3">
-                            <div class="media-body order-2 order-lg-1">
-                                <h5 class="mt-0 font-weight-bold mb-2">@auction.Title</h5>
-                                <p class="font-italic text-muted mb-0 small">@auction.Description</p>
-                                <div class="d-flex align-items-center justify-content-between mt-1">
-                                    <h6 class="font-weight-bold my-2">@auction.Price zł</h6>
-                                    <a asp-controller="Auction" asp-action="AuctionDetails" asp-route-id="@auction.Id" class="btn btn-secondary">Sczegóły</a>
-
-                                </div>
-                            </div><img src="data:image;base64,@Convert.ToBase64String(auction.Image)" width="200" class="ml-lg-5 order-1 order-lg-2">
-                        </div> <!-- End -->
-                </li> <!-- End -->
-            </ul> <!-- End -->
-        </div>
-        </div>
+            </div>
+        </a>
     }
+    <div class="row">
+    <nav class="mx-auto">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" @prevDisabled asp-action="AuctionList" asp-route-pageNumber="@(Model.PageIndex - 1)">Previous</a></li>
+            <li class="page-item"><a class="page-link" @nextDisabled asp-action="AuctionList" asp-route-pageNumber="@(Model.PageIndex + 1)">Next</a></li>
+        </ul>
+    </nav>
+    </div>
 </div>
-
-
-

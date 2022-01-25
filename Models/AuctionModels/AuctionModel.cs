@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using SerwisOgloszeniowy.Models.AccountManagerModels;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace SerwisOgloszeniowy.Models.AuctionModels
 {
@@ -22,6 +23,7 @@ namespace SerwisOgloszeniowy.Models.AuctionModels
         [Column(TypeName = "image")]
         public byte[] Image { get; set; }
         [Required(ErrorMessage = "Musisz podać cenę.")]
+        [RegularExpression(@"^[0-9]+$")]
         public int Price { get; set; }
         [Required(ErrorMessage = "Musisz napisać opis.")]
         public string Description { get; set; }
@@ -29,7 +31,8 @@ namespace SerwisOgloszeniowy.Models.AuctionModels
         public string City { get; set; }
         [Required(ErrorMessage = "Musisz podać email.")]
         public string Email { get; set; }
-        [Required(ErrorMessage = "Musisz podać numer telefonu.")]
+        [Required(ErrorMessage = "Musisz podać numer telefonu."), MinLength(9), MaxLength(9)]
+        [Phone]
         public string PhoneNumber { get; set; }
         [HiddenInput]
         public DateTime CreationTimestamp { get; set; }

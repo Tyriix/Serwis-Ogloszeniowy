@@ -82,7 +82,6 @@ namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
             }
             return View(user);
         }
-        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         public async Task<RedirectResult> Logout(string returnUrl = "/")
         {
@@ -105,6 +104,32 @@ namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
             var userId = _userManager.GetUserId(HttpContext.User);
             ApplicationUser user = _userManager.FindByIdAsync(userId).Result;
             return View(user);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Profile(ProfileModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = _userManager.GetUserId(HttpContext.User);
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                user.Firstname = model.Firstname;
+                user.City = model.City;
+                user.PhoneNo = model.PhoneNo;
+                user.Email = model.Email;
+                var userUpdated = await _userManager.UpdateAsync(user);
+                if (!userUpdated.Succeeded)
+                {
+                    ModelState.AddModelError("", "Something Failed");
+                    return View();
+                }
+                return RedirectToAction("Profile", "AccountManager");
+            }
+            ModelState.AddModelError("", "Something Failed");
+            return View();
         }
         //[HttpPut]
         //public async Task<IActionResult> Profile(ProfileModel model)

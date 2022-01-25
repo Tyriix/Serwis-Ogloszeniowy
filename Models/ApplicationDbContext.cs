@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SerwisOgloszeniowy.Models.AccountManagerModels;
 using SerwisOgloszeniowy.Models.AuctionModels;
+using System.Collections.Generic;
 
 namespace SerwisOgloszeniowy.Models
 {

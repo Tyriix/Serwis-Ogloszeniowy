@@ -15,7 +15,7 @@ namespace SerwisOgloszeniowy.Models.AccountManagerModels
         [Required]
         [RegularExpression(@"^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$", ErrorMessage = "Wpisz poprawne miasto.")]
         public string City { get; set; }
-        [Required]
+        [Required, MinLength(9), MaxLength(9)]
         [Phone(ErrorMessage = "Wpisz poprawny numer telefonu")]
         public string PhoneNo { get; set; }
     }

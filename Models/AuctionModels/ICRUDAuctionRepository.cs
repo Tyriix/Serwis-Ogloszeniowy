@@ -6,7 +6,7 @@ namespace SerwisOgloszeniowy.Views.Auction
 {
     public interface ICRUDAuctionRepository
     {
-        void Delete(int Id);
+        AuctionModel Delete(int Id);
 
         AuctionModel Update(AuctionModel auction);
 
