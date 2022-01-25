@@ -7,7 +7,8 @@
     <div class="card bg-light">
         <article class="card-body">
             <h3 class="card-title mt-3 text-center">Dodaj ogłoszenie</h3>
-            <form method="post">
+            <form method="post" asp-action="Add" asp-controller="Auction" enctype="multipart/form-data">
+                <div asp-validation-summary="All" style="color:#cc0000;"></div>
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-quote-right" style="width:2em"></i> </span>
@@ -36,7 +37,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-images" style="width:2em"></i> </span>
                     </div>
-                    <input asp-for="Image" type="file" class="form-control" style="padding:0.2rem 0.75rem" id="dodajZdjecie" multiple />
+                    <input asp-for="Image" type="file" accept="image/png, image/jpeg, image/jpg" class="form-control" style="padding:0.2rem 0.75rem" id="dodajZdjecie"/>
                 </div>
                 <div class="form-group">
                     <label for="opis">Opis*</label>
