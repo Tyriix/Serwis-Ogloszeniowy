@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SerwisOgloszeniowy.Models;
 using SerwisOgloszeniowy.Models.AccountManagerModels;
+using SerwisOgloszeniowy.Views.Auction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,7 @@ namespace SerwisOgloszeniowy
         {
             services.AddControllersWithViews();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration["Data:SerwisOgloszeniowy:ConnectionString"]));
+            services.AddTransient<ICRUDAuctionRepository, EFAuctionRepository>();
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
             services.AddMemoryCache();
             services.AddSession();

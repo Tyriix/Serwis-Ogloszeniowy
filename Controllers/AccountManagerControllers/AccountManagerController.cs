@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using SerwisOgloszeniowy.Models;
 using SerwisOgloszeniowy.Models.AccountManagerModels;
 using System.Threading.Tasks;
-
+using System.Linq;
 namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
 {
     public class AccountManagerController : Controller
@@ -11,10 +13,15 @@ namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
 
         private UserManager<ApplicationUser> _userManager;
         private SignInManager<ApplicationUser> _signInManager;
-        public AccountManagerController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+
+        public ApplicationDbContext _context { get; }
+
+        public AccountManagerController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
+
         }
 
         [AllowAnonymous]
@@ -75,6 +82,7 @@ namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
             }
             return View(user);
         }
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         public async Task<RedirectResult> Logout(string returnUrl = "/")
         {
@@ -91,31 +99,33 @@ namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
         {
             return View();
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> Profile(ApplicationUser userDetails)
-        //{
-        //    IdentityResult x = await _userManager.UpdateAsync(userDetails);
-        //    if (x.Succeeded)
-        //    {
-        //        return RedirectToAction("Index", "Home");
-        //    }
-        //    return View(userDetails);
-        //}
-        [Authorize]
         [HttpGet]
         public IActionResult Profile()
         {
-            var userid = _userManager.GetUserId(HttpContext.User);
-            if (userid == null)
-            {
-                return RedirectToAction("Login", "AccountManager");
-            }
-            else
-            {
-                ApplicationUser user = _userManager.FindByIdAsync(userid).Result;
-                return View(user);
-            }
+            var userId = _userManager.GetUserId(HttpContext.User);
+            ApplicationUser user = _userManager.FindByIdAsync(userId).Result;
+            return View(user);
         }
+        //[HttpPut]
+        //public async Task<IActionResult> Profile(ProfileModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        ModelState.AddModelError(string.Empty, "Dupa");               
+        //    }
+        //    else
+        //    {
+        //        var user = _context.Users.FirstOrDefault(u => u.Id == model.Id);
+        //        user.UserName = model.UserName;
+        //        user.City = model.City;
+        //        user.Email = model.Email;
+        //        user.PhoneNo = model.PhoneNo;
+        //        user.Firstname = model.Firstname;
+        //        //_context.Users.Update(user);
+        //        _context.SaveChanges();
+        //    }
+        //    return View("Profile");
+        //}
+
     }
 }
