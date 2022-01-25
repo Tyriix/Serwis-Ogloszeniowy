@@ -1,8 +1,6 @@
-﻿    using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
 using SerwisOgloszeniowy.Models.AuctionModels;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SerwisOgloszeniowy.Models.AccountManagerModels
 {

@@ -224,7 +224,7 @@ namespace SerwisOgloszeniowy.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("SerwisOgloszeniowy.Models.AuctionModels.AuctionModel", b =>
+            modelBuilder.Entity("SerwisOgloszeniowy.Models.AuctionModels.Auction", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -242,9 +242,6 @@ namespace SerwisOgloszeniowy.Migrations
                     b.Property<DateTime>("CreationTimestamp")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CurrentUserId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -254,7 +251,7 @@ namespace SerwisOgloszeniowy.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Image")
-                        .HasColumnType("image");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -268,6 +265,7 @@ namespace SerwisOgloszeniowy.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("userId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -328,11 +326,13 @@ namespace SerwisOgloszeniowy.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SerwisOgloszeniowy.Models.AuctionModels.AuctionModel", b =>
+            modelBuilder.Entity("SerwisOgloszeniowy.Models.AuctionModels.Auction", b =>
                 {
                     b.HasOne("SerwisOgloszeniowy.Models.AccountManagerModels.ApplicationUser", "user")
                         .WithMany("Auctions")
-                        .HasForeignKey("userId");
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("user");
                 });

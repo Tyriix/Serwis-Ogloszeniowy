@@ -3,7 +3,6 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using SerwisOgloszeniowy.Models.AccountManagerModels;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SerwisOgloszeniowy.Models.AuctionModels
 {
@@ -11,17 +10,15 @@ namespace SerwisOgloszeniowy.Models.AuctionModels
     {
         [HiddenInput]
         public int Id { get; set; }
+        [Required]
         [HiddenInput]
         public ApplicationUser user { get; set; }
-        [HiddenInput]
-        public string CurrentUserId { get; set; }
         [Required(ErrorMessage = "Musisz podać tytuł.")]
         public string Title { get; set; }
         [Required(ErrorMessage = "Prosze podać kategorię.")]
         public string Category { get; set; }
-        [Column(TypeName = "image")]
         public byte[] Image { get; set; }
-        [Required(ErrorMessage = "Musisz podać cenę.")]
+        [Required(ErrorMessage = "Musisz podaj cenę.")]
         public int Price { get; set; }
         [Required(ErrorMessage = "Musisz napisać opis.")]
         public string Description { get; set; }
@@ -31,7 +28,6 @@ namespace SerwisOgloszeniowy.Models.AuctionModels
         public string Email { get; set; }
         [Required(ErrorMessage = "Musisz podać numer telefonu.")]
         public string PhoneNumber { get; set; }
-        [HiddenInput]
         public DateTime CreationTimestamp { get; set; }
     }
 }
