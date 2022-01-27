@@ -4,12 +4,13 @@
 *@
 @{
 }
+<link rel="stylesheet" href="/css/AuctionDetails.css">
  <div class="row" style="height:400px;">
-            <div class="col-lg-8 mx-auto" style="height:400px;">
+            <div class="col-lg-8 mx-auto">
                 <!-- List group-->
-            <ul class="list-group shadow" style="height:400px;">
+            <ul class="list-group shadow">
                     <!-- list group item-->
-                <li class="list-group-item"style="height:400px;">
+                <li class="list-group-item">
                         <!-- Custom content-->
                     <div class="media align-items-lg-center flex-column flex-lg-row p-3">
                             <div class="media-body order-2 order-lg-1">
@@ -26,13 +27,14 @@
                                 <div class="d-flex align-items-center justify-content-between mt-1">
                                      <p class="font-italic text-muted mb-0 small">@Model.CreationTimestamp | @Model.City</p>
                                 </div>
-                                @if (@Model.CurrentUserId == (string)ViewData["currentUserId"])
+                                @if (@Model.CurrentUserId == (string)ViewData["currentUserId"] || User.IsInRole("Administrator"))
                                 {
                                     <form method="post" asp-action="Delete" asp-controller="Auction">
-                                    <button class="btn btn-primary" asp-action="Delete" asp-controller="Auction" asp-route-id='@Model.Id'>
-                                        Delete
+                                    <button class="btn btn-primary" asp-action="DeleteAuction" asp-controller="Auction" asp-route-id='@Model.Id'>
+                                        Zakończ aukcje
                                     </button>
                                     </form>
+                                    <a asp-action="EditAuction" asp-controller="Auction" asp-route-id='@Model.Id' class="btn btn-warning">Edytuj  </a>
                                 }
                     </div><img src="data:image;base64,@Convert.ToBase64String(@Model.Image)" width="200" height="200" class="ml-lg-5 order-1 order-lg-2">
                         </div> <!-- End -->

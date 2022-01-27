@@ -258,7 +258,8 @@ namespace SerwisOgloszeniowy.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(9)
+                        .HasColumnType("nvarchar(9)");
 
                     b.Property<int>("Price")
                         .HasColumnType("int");

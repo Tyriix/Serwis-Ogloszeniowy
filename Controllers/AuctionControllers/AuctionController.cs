@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SerwisOgloszeniowy.Controllers.AuctionControllers
 {
-    [Authorize]
+
     public class AuctionController : Controller
     {
         private readonly ApplicationDbContext context;
@@ -37,14 +37,41 @@ namespace SerwisOgloszeniowy.Controllers.AuctionControllers
             return View(auction);
         }
         [AllowAnonymous]
-        public async Task<IActionResult> AuctionList(string searchTerm, int pageNumber=1)
+        public async Task<IActionResult> AuctionList(string searchTerm, string categorySearch, int pageNumber=1)
         {
-            if (string.IsNullOrEmpty(searchTerm))
+            if (string.IsNullOrEmpty(searchTerm) && string.IsNullOrEmpty(categorySearch))
             {
                 return View(await PaginatedList<AuctionModel>.CreateAsync(context.Auctions, pageNumber, 5));
             }
-            return View(await PaginatedList<AuctionModel>.CreateAsync(context.Auctions.Where(c => c.Title.Contains(searchTerm)), pageNumber, 5));
+            else if (string.IsNullOrEmpty(searchTerm))
+            {
+                return View(await PaginatedList<AuctionModel>.CreateAsync(context.Auctions.Where(c => c.Category.Equals(categorySearch)), pageNumber, 5));
+            }
+            else if (string.IsNullOrEmpty(categorySearch))
+            {
+                return View(await PaginatedList<AuctionModel>.CreateAsync(context.Auctions.Where(c => c.Title.Contains(searchTerm)), pageNumber, 5));
+            }
+            return View(await PaginatedList<AuctionModel>.CreateAsync(context.Auctions.Where(c => c.Title.Contains(searchTerm)).Where(c => c.Category.Equals(categorySearch)), pageNumber, 5));
         }
+        [Authorize]
+        public async Task<IActionResult> UserAuctions(string searchTerm, string categorySearch, int pageNumber = 1)
+        {
+            string userId = userManager.GetUserId(HttpContext.User);
+            if (string.IsNullOrEmpty(searchTerm) && string.IsNullOrEmpty(categorySearch))
+            {
+                return View(await PaginatedList<AuctionModel>.CreateAsync(context.Auctions.Where(c => c.CurrentUserId.Equals(userId)), pageNumber, 5));
+            }
+            else if (string.IsNullOrEmpty(searchTerm))
+            {
+                return View(await PaginatedList<AuctionModel>.CreateAsync(context.Auctions.Where(c => c.Category.Equals(categorySearch) && c.CurrentUserId.Equals(userId)), pageNumber, 5));
+            }
+            else if (string.IsNullOrEmpty(categorySearch))
+            {
+                return View(await PaginatedList<AuctionModel>.CreateAsync(context.Auctions.Where(c => c.Title.Contains(searchTerm) && c.CurrentUserId.Equals(userId)), pageNumber, 5));
+            }
+            return View(await PaginatedList<AuctionModel>.CreateAsync(context.Auctions.Where(c => c.Title.Contains(searchTerm) && c.CurrentUserId.Equals(userId)), pageNumber, 5));
+        }
+        [Authorize]
         public IActionResult AddAuction()
         {
             var user = userManager.GetUserAsync(User).Result;
@@ -53,6 +80,7 @@ namespace SerwisOgloszeniowy.Controllers.AuctionControllers
             ViewBag.Email = user.Email;
             return View();
         }
+        [Authorize]
         [HttpPost]
         public IActionResult Add(AuctionModel item)
         {
@@ -76,11 +104,77 @@ namespace SerwisOgloszeniowy.Controllers.AuctionControllers
                 return View("AddAuction");
             }
         }
+        [Authorize]
         [HttpPost]
-        public IActionResult Delete(AuctionModel item)
+        public IActionResult DeleteAuction(AuctionModel item)
         {
             repository.Delete(item.Id);
-            return RedirectToAction("AuctionList", AuctionList(""));
+            return RedirectToAction("AuctionList", AuctionList("", ""));
+        }
+        [Authorize]
+        [HttpGet]
+        public IActionResult EditAuction(int id)
+        {
+            var auction = repository.FindById(id);
+            if (auction == null)
+            {
+                ViewBag.ErrorMessage = $"Nie znaleziono aukcji z Id: {id}";
+                return NotFound();
+            }
+            else
+            {
+                var model = new EditAuctionModel
+                {
+                    Title = auction.Title,
+                    Price = auction.Price,
+                    Category = auction.Category,
+                    Image = auction.Image,
+                    Description = auction.Description,
+                    City = auction.City,
+                    PhoneNumber = auction.PhoneNumber,
+                    Email = auction.Email
+                };
+                return View(model);
+            }
+        }
+        [Authorize]
+        [HttpPost]
+        public IActionResult EditAuction(EditAuctionModel model)
+        {
+            var auction = repository.FindById(model.Id);
+            if (ModelState.IsValid)
+            {
+                if (auction == null)
+                {
+                    ViewBag.ErrorMessage = $"Nie znaleziono aukcji z Id: {model.Id}";
+                    return NotFound();
+                }
+                else
+                {
+                    auction.Title = model.Title;
+                    auction.Price = model.Price;
+                    auction.Category = model.Category;
+                    auction.Description = model.Description;
+                    auction.City = model.City;
+                    auction.PhoneNumber = model.PhoneNumber;
+                    auction.Email = model.Email;
+                    foreach (var file in Request.Form.Files)
+                    {
+                        MemoryStream ms = new MemoryStream();
+                        file.CopyTo(ms);
+                        auction.Image = ms.ToArray();
+                        ms.Close();
+                        ms.Dispose();
+                    }
+                    auction.CreationTimestamp = DateTime.Now;
+                    repository.Update(auction);
+                    return RedirectToAction("AuctionList", "Auction");
+                }
+            }
+            else
+            {
+                return View("AddAuction");
+            }
         }
     }
 }

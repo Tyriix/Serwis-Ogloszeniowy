@@ -1,13 +1,42 @@
 ﻿body {
-    background: linear-gradient(to right, #c04848, #480048) !important;
     min-height: 100vh !important;
+    color: #566787;
+    font-family: 'Roboto', sans-serif;
 }
-
 .text-gray {
     color: #aaa !important;
 }
-
+.card {
+    border: none;
+}
 img {
     height: 170px !important;
     width: 140px !important;
 }
+.disabled{
+    pointer-events:none;
+}
+.search-box {
+    position: relative;
+    float: right;
+}
+
+    .search-box input {
+        height: 34px;
+        border-radius: 20px;
+        padding-left: 35px;
+        border-color: #ddd;
+        box-shadow: none;
+    }
+
+        .search-box input:focus {
+            border-color: #3FBAE4;
+        }
+
+    .search-box i {
+        color: #a0a5b1;
+        position: absolute;
+        font-size: 19px;
+        top: 8px;
+        left: 10px;
+    }

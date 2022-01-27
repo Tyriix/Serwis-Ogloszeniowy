@@ -10,8 +10,8 @@ using SerwisOgloszeniowy.Models;
 namespace SerwisOgloszeniowy.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220125000020_AuctionDb")]
-    partial class AuctionDb
+    [Migration("20220126163422_ApplicationDbConnection")]
+    partial class ApplicationDbConnection
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -245,7 +245,6 @@ namespace SerwisOgloszeniowy.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CurrentUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
@@ -257,11 +256,12 @@ namespace SerwisOgloszeniowy.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Image")
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("image");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(9)
+                        .HasColumnType("nvarchar(9)");
 
                     b.Property<int>("Price")
                         .HasColumnType("int");

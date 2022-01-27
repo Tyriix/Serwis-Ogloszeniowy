@@ -4,6 +4,19 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    @if(User.IsInRole("Administrator"))
+    {
+    <h1 class="display-4">Witaj administratorze</h1>
+    <p>Powyżej możesz zarządzać użytkownikami oraz ogłoszeniami.</p>
+    }
+    else if(User.IsInRole("Member"))
+    {
+    <h1 class="display-4">Witaj na Serwisie Ogłoszeniowym</h1>
+    <p>Powyżej możesz dodawać i przeglądać ogłoszenia.</p>
+    }
+    else
+    {
+    <h1 class="display-4">Witaj na Serwisie Ogłoszeniowym</h1>
+    <p>Powyżej możesz się zarejestrować oraz przeglądać i dodawać ogłoszenia.</p>
+    }
 </div>

@@ -1,15 +1,12 @@
 ﻿@using SerwisOgloszeniowy.Models
 @using SerwisOgloszeniowy.Models.AuctionModels
 @model PaginatedList<SerwisOgloszeniowy.Models.AuctionModels.AuctionModel>
-@*@model SerwisOgloszeniowy.Models.AuctionModels.AuctionModel*@
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
     var prevDisabled = !Model.PreviousPage ? "disabled" : "";
     var nextDisabled = !Model.NextPage ? "disabled" : "";
-}
-@{
 }
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -19,12 +16,12 @@
 <div class="container py-5">
     <div class="row text-center text-black mb-5">
         <div class="col-lg-7 mx-auto">
-            <h1 class="display-4">Lista ogłoszeń</h1>
+            <h1 class="display-4">Moje ogłoszenia</h1>
         </div>
     </div>
-    <div class="row mx-auto" style="margin-bottom: 30px;">
+    <div class="row" style="margin-bottom: 30px">
         <div class="col-lg-8 mx-auto">
-            <div class="row justify-content-center mx-auto">
+            <div class="row justify-content-center">
                 <div class="col-12 col-md-10 col-lg-8">
                     <div class="row">
                         <div class="col-sm-7 mx-auto">
@@ -89,9 +86,9 @@
                                         <p class="font-italic text-muted mb-0 small">@auction.CreationTimestamp | @auction.City</p>
                                     </div>
                                 </div>
-                                @if (auction.Image != null)
+                                @if(auction.Image != null)
                                 {
-                                    <img src="data:image;base64,@Convert.ToBase64String(auction.Image)" width="200" height="200" class="ml-lg-5 order-1 order-lg-2">
+                                <img src="data:image;base64,@Convert.ToBase64String(auction.Image)" width="200" height="200" class="ml-lg-5 order-1 order-lg-2">
                                 }
                             </div> <!-- End -->
                     </li> <!-- End -->

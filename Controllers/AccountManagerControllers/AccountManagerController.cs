@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using SerwisOgloszeniowy.Models;
 using SerwisOgloszeniowy.Models.AccountManagerModels;
 using System.Threading.Tasks;
-using System.Linq;
 namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
 {
     public class AccountManagerController : Controller
@@ -23,7 +21,7 @@ namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
             _signInManager = signInManager;
 
         }
-
+        //REGISTER, LOGIN AND LOGOUT
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -33,7 +31,7 @@ namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
             {
                 var user = new ApplicationUser
                 {
-                    UserName = registerModel.Username,
+                    UserName = registerModel.Email,
                     Email = registerModel.Email,
                     Firstname = registerModel.Firstname,
                     City = registerModel.City,
@@ -44,6 +42,12 @@ namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
 
                 if (result.Succeeded)
                 {
+                    if (_signInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+                    {
+                        return RedirectToAction("UserList", "Administration");
+                    }
+                    string roleName = "Member";
+                    await _userManager.AddToRoleAsync(user, roleName);
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
                     return RedirectToAction("Index", "Home");
@@ -69,7 +73,7 @@ namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(user.Username, user.Password, user.RememberMe, false);
+                var result = await _signInManager.PasswordSignInAsync(user.Email, user.Password, user.RememberMe, false);
                 if (result.Succeeded)
                 {
                     if (!string.IsNullOrEmpty(returnUrl))
@@ -98,6 +102,8 @@ namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
         {
             return View();
         }
+        //PROFILE
+        [Authorize]
         [HttpGet]
         public IActionResult Profile()
         {
@@ -105,6 +111,7 @@ namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
             ApplicationUser user = _userManager.FindByIdAsync(userId).Result;
             return View(user);
         }
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Profile(ProfileModel model)
         {
@@ -116,10 +123,11 @@ namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
                 {
                     return NotFound();
                 }
+                user.Email = model.Email;
+                user.UserName = model.Email;
                 user.Firstname = model.Firstname;
                 user.City = model.City;
-                user.PhoneNo = model.PhoneNo;
-                user.Email = model.Email;
+                user.PhoneNo = model.PhoneNo; 
                 var userUpdated = await _userManager.UpdateAsync(user);
                 if (!userUpdated.Succeeded)
                 {
@@ -131,26 +139,5 @@ namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
             ModelState.AddModelError("", "Something Failed");
             return View();
         }
-        //[HttpPut]
-        //public async Task<IActionResult> Profile(ProfileModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        ModelState.AddModelError(string.Empty, "Dupa");               
-        //    }
-        //    else
-        //    {
-        //        var user = _context.Users.FirstOrDefault(u => u.Id == model.Id);
-        //        user.UserName = model.UserName;
-        //        user.City = model.City;
-        //        user.Email = model.Email;
-        //        user.PhoneNo = model.PhoneNo;
-        //        user.Firstname = model.Firstname;
-        //        //_context.Users.Update(user);
-        //        _context.SaveChanges();
-        //    }
-        //    return View("Profile");
-        //}
-
     }
 }

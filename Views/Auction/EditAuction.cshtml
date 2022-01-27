@@ -1,8 +1,8 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using SerwisOgloszeniowy.Models.AccountManagerModels
-@model SerwisOgloszeniowy.Models.AuctionModels.AuctionModel
+﻿@model SerwisOgloszeniowy.Models.AuctionModels.EditAuctionModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
 @{
-    ViewData["Title"] = "Dodaj Ogłoszenie";
     string currentCity = @ViewBag.City;
     string currentEmail = @ViewBag.Email;
     string currentPhoneNumber = @ViewBag.PhoneNumber;
@@ -12,19 +12,19 @@
     <div class="card bg-light">
         <article class="card-body">
             <h3 class="card-title mt-3 text-center">Dodaj ogłoszenie</h3>
-            <form method="post" asp-action="Add" asp-controller="Auction" enctype="multipart/form-data">
+            <form method="post" asp-action="EditAuction" asp-controller="Auction" enctype="multipart/form-data">
                 <div asp-validation-summary="All" style="color:#cc0000;"></div>
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-quote-right" style="width:2em"></i> </span>
                     </div>
-                    <input asp-for="Title" class="form-control" placeholder="Tytuł" type="text">
+                    <input asp-for="Title" class="form-control" value="@Model.Title" type="text">
                 </div>
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-envelope" style="width:2em"></i> </span>
                     </div>
-                    <select asp-for="Category" id="kategoria" class="form-control">
+                    <select asp-for="Category" value="@Model.Category" id="kategoria" class="form-control">
                         <option value="Moda">Moda</option>
                         <option value="Elektronika">Elektronika</option>
                         <option value="Motoryzacja">Motoryzacja</option>
@@ -38,9 +38,10 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-dollar-sign" style="width:2em"></i> </span>
                     </div>
-                    <input asp-for="Price" class="form-control" placeholder="Cena" type="text">
+                    <input asp-for="Price" class="form-control" value=@Model.Price type="text">
                 </div>
-                <div class="form-group input-group">
+                <span class="mx-auto text-danger">Prosze ponownie dodać zdjęcie</span>
+                <div class="form-group input-group">            
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-images" style="width:2em"></i> </span>
                     </div>
@@ -48,7 +49,7 @@
                 </div>
                 <div class="form-group">
                     <label for="opis">Opis*</label>
-                    <textarea asp-for="Description" class="form-control" placeholder="Opisz szczegółowo sprzedawany przez ciebie przedmiot" type="textarea" id="opis" rows="7"></textarea>
+                    <textarea asp-for="Description" class="form-control" value="@Model.Description" type="textarea" id="opis" rows="7"></textarea>
                 </div>
                 <h4 class="card-title mt-3 text-center">Dane kontaktowe</h4>
                 <div class="form-group input-group">
@@ -56,19 +57,19 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-map-marker-alt" style="width:2em"></i> </span>
                     </div>
-                    <input asp-for="City" class="form-control" value="@currentCity" type="text">
+                    <input asp-for="City" class="form-control" value="@Model.City" type="text">
                 </div>
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-envelope" style="width:2em"></i> </span>
                     </div>
-                    <input asp-for="Email" class="form-control" value="@currentEmail" type="text">
+                    <input asp-for="Email" class="form-control" value="@Model.Email" type="text">
                 </div>
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-mobile-alt" style="width:2em"></i> </span>
                     </div>
-                    <input asp-for="PhoneNumber" class="form-control" value="@currentPhoneNumber" type="text">
+                    <input asp-for="PhoneNumber" class="form-control" value="@Model.PhoneNumber" type="text">
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block"> Dodaj ogłoszenie </button>
