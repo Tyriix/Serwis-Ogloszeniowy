@@ -17,14 +17,17 @@ namespace SerwisOgloszeniowy.Models.AccountManagerModels
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Powtórzone hasło się nie zgadza.")]
         public string RepeatPassword { get; set; }
+
         [Required]
         [RegularExpression(@"^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$", ErrorMessage = "Wpisz poprawne imię.")]
         public string Firstname { get; set; }
+
         [Required]
-        [RegularExpression(@"^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$", ErrorMessage = "Wpisz poprawne miasto.")]
+        [RegularExpression(@"^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$", ErrorMessage = "Wpisz poprawną nazwę miasta.")]
         public string City { get; set; }
+
         [Required(ErrorMessage = "Musisz podać numer telefonu."), MinLength(9), MaxLength(9)]
-        [RegularExpression(@"^[0-9]+$")]
+        [RegularExpression(@"^[0-9]+$", ErrorMessage = "Wpisz poprawny numer telefonu.")]
         [Phone]
         public string PhoneNo { get; set; }
     }

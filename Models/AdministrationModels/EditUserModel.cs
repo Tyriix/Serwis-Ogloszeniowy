@@ -10,14 +10,27 @@ namespace SerwisOgloszeniowy.Models.AdministrationModels
             Roles = new List<string>();
         }
         public string Id { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Musisz podać nazwę użytkownika.")]
         public string UserName { get; set; }
-        [Required]
-        [EmailAddress]
+
+        [Required(ErrorMessage = "Musisz podać email.")]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+
+        [Required(ErrorMessage = "Musisz podać imię.")]
+        [RegularExpression(@"^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$", ErrorMessage = "Wpisz poprawne imię.")]
         public string Firstname { get; set; }
+
+        [Required(ErrorMessage = "Musisz podać miasto.")]
+        [RegularExpression(@"^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$", ErrorMessage = "Wpisz poprawną nazwę miasta.")]
         public string City { get; set; }
+
+        [Required(ErrorMessage = "Musisz podać numer telefonu."), MinLength(9), MaxLength(9)]
+        [RegularExpression(@"^[0-9]+$", ErrorMessage = "Wpisz poprawny numer telefonu.")]
+        [Phone]
         public string PhoneNo { get; set; }
+
         public IList<string> Roles { get; set;}
     }
 }

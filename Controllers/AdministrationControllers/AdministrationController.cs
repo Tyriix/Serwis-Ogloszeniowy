@@ -29,9 +29,9 @@ namespace SerwisOgloszeniowy.Controllers.AdministrationControllers
         {
             if (string.IsNullOrEmpty(searchTerm))
             {
-                return View(await PaginatedList<ApplicationUser>.CreateAsync(_context.applicationUsers, pageNumber, 3));
+                return View(await PaginatedList<ApplicationUser>.CreateAsync(_context.applicationUsers, pageNumber, 5));
             }
-            return View(await PaginatedList<ApplicationUser>.CreateAsync(_context.applicationUsers.Where(c => c.UserName.Contains(searchTerm)), pageNumber, 3));
+            return View(await PaginatedList<ApplicationUser>.CreateAsync(_context.applicationUsers.Where(c => c.UserName.Contains(searchTerm)), pageNumber, 5));
         }
         [HttpGet]
         public async Task<IActionResult> EditUser(string id)
@@ -60,6 +60,7 @@ namespace SerwisOgloszeniowy.Controllers.AdministrationControllers
         public async Task<IActionResult> EditUser(EditUserModel model)
         {
             var user = await _userManager.FindByIdAsync(model.Id);
+
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"Nie znaleziono użytkownika z Id: {model.Id}";

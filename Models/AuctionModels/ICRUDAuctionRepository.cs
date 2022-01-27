@@ -11,8 +11,11 @@ namespace SerwisOgloszeniowy.Views.Auction
         AuctionModel Update(AuctionModel auction);
 
         AuctionModel FindById(int Id);
+
         IList<AuctionModel> FindAll();
+
         AuctionModel Save(AuctionModel auction);
+
         IQueryable<AuctionModel> Auctions { get; }
 
     }
