@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SerwisOgloszeniowy.Models;
 using SerwisOgloszeniowy.Models.AccountManagerModels;
+using SerwisOgloszeniowy.Services;
 using System.Threading.Tasks;
 namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
 {
@@ -11,15 +12,16 @@ namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
 
         private UserManager<ApplicationUser> _userManager;
         private SignInManager<ApplicationUser> _signInManager;
+        private readonly IAccountManagerService _service;
 
         public ApplicationDbContext _context { get; }
 
-        public AccountManagerController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountManagerController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IAccountManagerService service)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
-
+            _service = service;
         }
         //REGISTER, LOGIN AND LOGOUT
         [AllowAnonymous]
@@ -69,6 +71,7 @@ namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        
         public async Task<IActionResult> Login(LoginModel user, string returnUrl)
         {
             if (ModelState.IsValid)
@@ -76,11 +79,12 @@ namespace SerwisOgloszeniowy.Controllers.AccountManagerControllers
                 var result = await _signInManager.PasswordSignInAsync(user.Email, user.Password, user.RememberMe, false);
                 if (result.Succeeded)
                 {
-                    if (!string.IsNullOrEmpty(returnUrl))
+                    if (string.IsNullOrEmpty(returnUrl))
                     {
-                        return Redirect(returnUrl);
+                        return RedirectToAction("Index", "Home");
+                        
                     }
-                    return RedirectToAction("Index", "Home");
+                    return Redirect(returnUrl);
                 }
                 ModelState.AddModelError(string.Empty, "Zła nazwa użytkownika lub hasło.");
             }

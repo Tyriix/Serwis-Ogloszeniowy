@@ -14,6 +14,8 @@ using Microsoft.Extensions.Logging;
 using SerwisOgloszeniowy.Models;
 using SerwisOgloszeniowy.Models.AccountManagerModels;
 using SerwisOgloszeniowy.Models.AuctionModels;
+using SerwisOgloszeniowy.Models.PremiumUsers;
+using SerwisOgloszeniowy.Services;
 using SerwisOgloszeniowy.Views.Auction;
 using System;
 using System.Collections.Generic;
@@ -37,11 +39,13 @@ namespace SerwisOgloszeniowy
             services.AddControllersWithViews();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration["Data:SerwisOgloszeniowy:ConnectionString"]));
             services.AddTransient<ICRUDAuctionRepository, CRUDAuctionRepository>();
+            services.AddTransient<ICRUDPremiumUsersRepository, CRUDPremiumUsersRepository>();
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
             services.AddMemoryCache();
             services.AddSession();
             services.AddMvcCore().AddAuthorization();
             services.AddControllers();
+            services.AddScoped<IAccountManagerService, AccountManagerService>();
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;

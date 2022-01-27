@@ -15,7 +15,7 @@ namespace SerwisOgloszeniowy.Models.AuctionModels
         public ApplicationUser user { get; set; }
 
         [HiddenInput]
-        public string CurrentUserId { get; set; }
+        public string UserId { get; set; }
 
         [Required(ErrorMessage = "Musisz podać tytuł.")]
         public string Title { get; set; }

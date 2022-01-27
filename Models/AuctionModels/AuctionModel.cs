@@ -14,10 +14,10 @@ namespace SerwisOgloszeniowy.Models.AuctionModels
         public int Id { get; set; }
 
         [HiddenInput]
-        public ApplicationUser user { get; set; }
+        public ApplicationUser User { get; set; }
 
         [HiddenInput]
-        public string CurrentUserId { get; set; }
+        public string UserId { get; set; }
 
         [Required(ErrorMessage = "Musisz podać tytuł.")]
         public string Title { get; set; }

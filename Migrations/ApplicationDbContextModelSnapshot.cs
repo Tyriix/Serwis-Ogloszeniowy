@@ -242,9 +242,6 @@ namespace SerwisOgloszeniowy.Migrations
                     b.Property<DateTime>("CreationTimestamp")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CurrentUserId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -268,14 +265,36 @@ namespace SerwisOgloszeniowy.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("userId")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("userId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Auctions");
+                });
+
+            modelBuilder.Entity("SerwisOgloszeniowy.Models.PremiumUsers.PremiumUsersModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("isPremium")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
+
+                    b.ToTable("PremiumUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -331,16 +350,29 @@ namespace SerwisOgloszeniowy.Migrations
 
             modelBuilder.Entity("SerwisOgloszeniowy.Models.AuctionModels.AuctionModel", b =>
                 {
-                    b.HasOne("SerwisOgloszeniowy.Models.AccountManagerModels.ApplicationUser", "user")
+                    b.HasOne("SerwisOgloszeniowy.Models.AccountManagerModels.ApplicationUser", "User")
                         .WithMany("Auctions")
-                        .HasForeignKey("userId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("user");
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SerwisOgloszeniowy.Models.PremiumUsers.PremiumUsersModel", b =>
+                {
+                    b.HasOne("SerwisOgloszeniowy.Models.AccountManagerModels.ApplicationUser", "User")
+                        .WithOne("PremiumUser")
+                        .HasForeignKey("SerwisOgloszeniowy.Models.PremiumUsers.PremiumUsersModel", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SerwisOgloszeniowy.Models.AccountManagerModels.ApplicationUser", b =>
                 {
                     b.Navigation("Auctions");
+
+                    b.Navigation("PremiumUser");
                 });
 #pragma warning restore 612, 618
         }

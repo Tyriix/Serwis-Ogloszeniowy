@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SerwisOgloszeniowy.Migrations
 {
-    public partial class ApplicationDbConnection : Migration
+    public partial class AppDbContext : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -161,8 +161,7 @@ namespace SerwisOgloszeniowy.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    userId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CurrentUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Image = table.Column<byte[]>(type: "image", nullable: true),
@@ -177,11 +176,31 @@ namespace SerwisOgloszeniowy.Migrations
                 {
                     table.PrimaryKey("PK_Auctions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Auctions_AspNetUsers_userId",
-                        column: x => x.userId,
+                        name: "FK_Auctions_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PremiumUsers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    isPremium = table.Column<bool>(type: "bit", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PremiumUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PremiumUsers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -224,9 +243,16 @@ namespace SerwisOgloszeniowy.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Auctions_userId",
+                name: "IX_Auctions_UserId",
                 table: "Auctions",
-                column: "userId");
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PremiumUsers_UserId",
+                table: "PremiumUsers",
+                column: "UserId",
+                unique: true,
+                filter: "[UserId] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -248,6 +274,9 @@ namespace SerwisOgloszeniowy.Migrations
 
             migrationBuilder.DropTable(
                 name: "Auctions");
+
+            migrationBuilder.DropTable(
+                name: "PremiumUsers");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

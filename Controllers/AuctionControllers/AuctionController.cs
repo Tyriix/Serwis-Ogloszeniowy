@@ -23,7 +23,7 @@ namespace SerwisOgloszeniowy.Controllers.AuctionControllers
 
         private ICRUDAuctionRepository repository;
 
-        public AuctionController(ICRUDAuctionRepository repository, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public AuctionController(ICRUDAuctionRepository repository , ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             this.repository = repository;
             this.context = context;
@@ -32,7 +32,7 @@ namespace SerwisOgloszeniowy.Controllers.AuctionControllers
         [AllowAnonymous]
         public IActionResult AuctionDetails(AuctionModel auction)
         {
-            ViewData["currentUserId"] = userManager.GetUserId(HttpContext.User);
+            ViewData["UserId"] = userManager.GetUserId(HttpContext.User);
             auction = repository.FindById(auction.Id);
             return View(auction);
         }
@@ -59,17 +59,17 @@ namespace SerwisOgloszeniowy.Controllers.AuctionControllers
             string userId = userManager.GetUserId(HttpContext.User);
             if (string.IsNullOrEmpty(searchTerm) && string.IsNullOrEmpty(categorySearch))
             {
-                return View(await PaginatedList<AuctionModel>.CreateAsync(context.Auctions.Where(c => c.CurrentUserId.Equals(userId)), pageNumber, 5));
+                return View(await PaginatedList<AuctionModel>.CreateAsync(context.Auctions.Where(c => c.UserId.Equals(userId)), pageNumber, 5));
             }
             else if (string.IsNullOrEmpty(searchTerm))
             {
-                return View(await PaginatedList<AuctionModel>.CreateAsync(context.Auctions.Where(c => c.Category.Equals(categorySearch) && c.CurrentUserId.Equals(userId)), pageNumber, 5));
+                return View(await PaginatedList<AuctionModel>.CreateAsync(context.Auctions.Where(c => c.Category.Equals(categorySearch) && c.UserId.Equals(userId)), pageNumber, 5));
             }
             else if (string.IsNullOrEmpty(categorySearch))
             {
-                return View(await PaginatedList<AuctionModel>.CreateAsync(context.Auctions.Where(c => c.Title.Contains(searchTerm) && c.CurrentUserId.Equals(userId)), pageNumber, 5));
+                return View(await PaginatedList<AuctionModel>.CreateAsync(context.Auctions.Where(c => c.Title.Contains(searchTerm) && c.UserId.Equals(userId)), pageNumber, 5));
             }
-            return View(await PaginatedList<AuctionModel>.CreateAsync(context.Auctions.Where(c => c.Title.Contains(searchTerm) && c.CurrentUserId.Equals(userId)), pageNumber, 5));
+            return View(await PaginatedList<AuctionModel>.CreateAsync(context.Auctions.Where(c => c.Title.Contains(searchTerm) && c.UserId.Equals(userId)), pageNumber, 5));
         }
         [Authorize]
         public IActionResult AddAuction()
@@ -95,7 +95,7 @@ namespace SerwisOgloszeniowy.Controllers.AuctionControllers
                     ms.Dispose();
                 }
                 item.CreationTimestamp = DateTime.Now;
-                item.CurrentUserId = userManager.GetUserId(HttpContext.User);
+                item.UserId = userManager.GetUserId(HttpContext.User);
                 repository.Save(item);
                 return View("ConfirmAuction");
             }

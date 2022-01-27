@@ -14,6 +14,7 @@ using System.Linq;
 using SerwisOgloszeniowy.Models.AdministrationModels;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
+using SerwisOgloszeniowy.Models.PremiumUsers;
 
 namespace SerwisOgloszeniowy.Controllers
 {
@@ -25,16 +26,21 @@ namespace SerwisOgloszeniowy.Controllers
     {
 
         private ICRUDAuctionRepository auctions;
+        private ICRUDPremiumUsersRepository premiumUsers;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public ApiController(ICRUDAuctionRepository auctions, ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+
+        public ApiController(ICRUDAuctionRepository auctions, ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, ICRUDPremiumUsersRepository premiumUsers)
         {
             this.auctions = auctions;
+            this.premiumUsers = premiumUsers;
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
         //EXCEPTION
         public class MyExceptionAttribute : ExceptionFilterAttribute
@@ -175,6 +181,57 @@ namespace SerwisOgloszeniowy.Controllers
             user.Firstname = model.Firstname;
             return new OkObjectResult(user);
         }
+        [HttpPost]
+        [Route("DeleteUser/{id}")]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"Nie znaleziono użytkownika z Id: {id}";
+                return NotFound();
+            }
+            else
+            {
+
+                var result = await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    return new CreatedResult($"api/{user.Email}", $"{user.Email} został usunięty.");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+                return BadRequest();
+            }
+        }
+        [HttpGet]
+        [Route("GetRoles/{id}")]
+        public async Task<IActionResult> GetRoles(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
+                return NotFound();
+            }
+
+            var model = new List<UserRolesModel>();
+
+            foreach (var role in _roleManager.Roles.ToList())
+            {
+                var userRolesViewModel = new UserRolesModel
+                {
+                    RoleId = role.Id,
+                    RoleName = role.Name
+                };
+                return new CreatedResult($"api/{user.Id}", $"Użytkownik należy do: {userRolesViewModel.RoleName}");
+            }
+            return Ok();
+        }
         //ACCOUNTMANAGER
         [HttpPost]
         [Route("Login")]
@@ -243,5 +300,56 @@ namespace SerwisOgloszeniowy.Controllers
             return new CreatedResult($"api/Profile/{user.Email}",
                 $"Email: {user.Email} Imię: {user.Firstname} Miasto: {user.City} Numer telefonu: {user.PhoneNo}");
         }
+        [Authorize]
+        [HttpPut]
+        [Route("Profile")]
+        public async Task<IActionResult> Profile(ProfileModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = _userManager.GetUserId(HttpContext.User);
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                user.Email = model.Email;
+                user.UserName = model.Email;
+                user.Firstname = model.Firstname;
+                user.City = model.City;
+                user.PhoneNo = model.PhoneNo;
+                var userUpdated = await _userManager.UpdateAsync(user);
+                if (!userUpdated.Succeeded)
+                {
+                    return BadRequest();
+                }
+                return new CreatedResult($"api/Profile/{user.Email}",
+                    $"Pomyślnie zaktualizowano dane.");
+            }
+            ModelState.AddModelError("", "Something Failed");
+            return BadRequest();
+        }
+        //PREMIUMUSER
+        //[HttpPost]
+        //[Route("AddPremium/{id}")]
+        //public async Task<IActionResult> AddPremium(string id, PremiumUsersModel item)
+        //{
+        //    ApplicationUser UserDb = await _userManager.FindByIdAsync(id);
+        //    PremiumUsersModel premiumUser = _context.PremiumUsers.Where(x => x.UserId == id).FirstOrDefault();
+        //    if (premiumUser != null)
+        //    {
+        //        return new CreatedResult($"api/Profile/{UserDb.Email}",
+        //           $"Użytkownik już posiada konto premium.");
+        //    }
+        //    else
+        //    {
+        //        item.UserId = id;
+        //        item.isPremium = true;
+        //        premiumUsers.Save(item);
+        //        return new CreatedResult($"api/Profile/{UserDb.Email}",
+        //           $"Pomyślnie aktywowano konto premium");
+        //    }
+
+        //}
     }
 }
