@@ -3,6 +3,6 @@
     public interface IAccountManagerService
     {
         bool CheckMail(string email);
-        bool checkPassword(sbyte password);
+        bool CheckPassword(string password);
     }
 }
