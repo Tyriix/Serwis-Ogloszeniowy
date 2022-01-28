@@ -14,15 +14,7 @@ Hasło = Admin123!
 
 ////
 Użytkownicy mogą:
--Zarejestrować się
--Zalogować się
--Wylogować się
--Zmieniać dane oraz dodać konto premium w karcie profil
--Dodawać aukcje
--Usuwać swoje aukcje
--Przeglądać swoje oraz aukcje innych użytkowników wraz z filtrowaniem(tytuł, kategoria)
+Zarejestrować się, zalogować się, wylogować się, zmieniać dane oraz dodać konto premium w karcie profil ,dodawać aukcje, usuwać swoje aukcje, przeglądać swoje oraz aukcje innych użytkowników wraz z filtrowaniem(tytuł, kategoria)
 
 Administratorzy mogą:
--Edytować dane użytkowników oraz ich usuwać
--Edytować role użytkowników
--Edytować oraz usuwać aukcje
+Edytować dane użytkowników oraz ich usuwać, edytować role użytkowników, edytować oraz usuwać aukcje
