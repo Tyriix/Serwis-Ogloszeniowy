@@ -33,7 +33,18 @@ namespace SerwisOgloszeniowy.Services
             {
                 return false;
             }
+        }
 
+        public bool CheckRepeatPassword(string password, string repeatPassword)
+        {
+            if (password == repeatPassword)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

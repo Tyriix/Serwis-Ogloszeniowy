@@ -4,5 +4,6 @@
     {
         bool CheckMail(string email);
         bool CheckPassword(string password);
+        bool CheckRepeatPassword(string password, string repeatPassword);
     }
 }

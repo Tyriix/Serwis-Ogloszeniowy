@@ -13,7 +13,6 @@ namespace SerwisOgloszeniowy.Models
         public DbSet<ApplicationUser> applicationUsers { get; set; }
         public DbSet<AuctionModel> Auctions { get; set; }
         public DbSet<PremiumUsersModel> PremiumUsers { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

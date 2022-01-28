@@ -5,11 +5,13 @@ using Microsoft.AspNetCore.Identity;
 using SerwisOgloszeniowy.Models.AccountManagerModels;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
+using SerwisOgloszeniowy.Views.Auction;
 
 namespace SerwisOgloszeniowy.Models.AuctionModels
 {
     public class AuctionModel
     {
+
         [HiddenInput]
         public int Id { get; set; }
 

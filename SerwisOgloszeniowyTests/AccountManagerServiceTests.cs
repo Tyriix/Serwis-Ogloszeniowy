@@ -55,5 +55,25 @@ namespace SerwisOgloszeniowyTests
             //ASSERT
             response.Should().BeFalse();
         }
+        [Theory]
+        [InlineData("Password123!", "Password123!")]
+        [InlineData("Silneh@slo1", "Silneh@slo1")]
+        public async Task CheckRepeatPassword_ForValidData_returnsTrue(string password, string repeatPassword)
+        {
+            //ACT
+            var response = service.CheckRepeatPassword(password, repeatPassword);
+            //ASSERT
+            response.Should().BeTrue();
+        }
+        [Theory]
+        [InlineData("youngleosia", "mlodaleokadia")]
+        [InlineData("bardzosilnehaslo", "barsilnehasl")]
+        public async Task CheckRepeatPassword_ForValidData_returnsFalse(string password, string repeatPassword)
+        {
+            //ACT
+            var response = service.CheckRepeatPassword(password, repeatPassword);
+            //ASSERT
+            response.Should().BeFalse();
+        }
     }
 }
