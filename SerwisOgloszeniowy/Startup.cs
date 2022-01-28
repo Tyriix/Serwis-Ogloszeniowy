@@ -101,8 +101,8 @@ namespace SerwisOgloszeniowy
             }
 
             // Get these value from "appsettings.json" file.
-            string adminUserEmail = "adminAccount@admin.com";
-            string adminPwd = "!Admin123";
+            string adminUserEmail = "admin@admin.com";
+            string adminPwd = "Admin123!";
             AddUserToRole(serviceProvider, adminUserEmail, adminPwd, adminRoleName);
         }
 
